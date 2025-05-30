@@ -13,6 +13,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
@@ -90,6 +91,7 @@ public class Tank2025 extends Application {
     }
 
     private static ArrayList<Enemy> enemies = new ArrayList<>( );
+    private static int maxTanks;
 
     public static ArrayList<Enemy> getEnemies() {
         return enemies;
@@ -97,6 +99,17 @@ public class Tank2025 extends Application {
 
     public static PlayerTank player;
     private static int score = 0;
+
+    public static double getSpawnX() {
+        return spawnX;
+    }
+
+    public static double getSpawnY() {
+        return spawnY;
+    }
+
+    private static double spawnX;
+    private static double spawnY;
 
     public static void main(String[] args) {
         launch(args);
@@ -121,8 +134,8 @@ public class Tank2025 extends Application {
         root.getChildren( ).add(stats);
 
         stage.setTitle("Tank 2025");
-        stage.setWidth(800);
-        stage.setHeight(600);
+        stage.setWidth(Screen.getPrimary().getVisualBounds().getWidth());
+        stage.setHeight(Screen.getPrimary().getVisualBounds().getHeight());
         stage.setResizable(false);
 
         pauseMenu = new VBox(20);
@@ -143,9 +156,12 @@ public class Tank2025 extends Application {
         root.getChildren( ).addAll(gamezone.getWalls( ));
 
         player = new PlayerTank(playerTank1Image);
-        player.setLayoutX(50);
-        player.setLayoutY(50);
+        spawnX = stage.getWidth() / 2;
+        spawnY = stage.getHeight() / 2 + 60;
+        player.setLayoutX(spawnX);
+        player.setLayoutY(spawnY);
         root.getChildren( ).add(player);
+        maxTanks = 20;
 
         scene.setOnKeyPressed(event -> {
             switch (event.getCode( )) {
@@ -238,10 +254,6 @@ public class Tank2025 extends Application {
                         }
                     }
 
-                    if (RToggle) {
-
-                    }
-
                     Iterator<Bullet> bulletIterator = bullets.iterator( );
                     while (bulletIterator.hasNext( )) {
                         Bullet bullet = bulletIterator.next( );
@@ -266,7 +278,7 @@ public class Tank2025 extends Application {
                         }
                     }
 
-                    if (enemies.size( ) < 7) {
+                    if (enemies.size( ) < maxTanks) {
                         boolean create = true;
                         Enemy enemyDummy = new Enemy(enemyTank1Image);
                         int dummyX = rand.nextInt((int) stage.getHeight( ) - 120) + 60;
@@ -275,6 +287,13 @@ public class Tank2025 extends Application {
                         enemyDummy.setLayoutY(dummyY);
 
                         if (enemyDummy.getBoundsInParent( ).intersects(player.getBoundsInParent( ))) {
+                            create = false;
+                        }
+
+                        double distanceX = enemyDummy.getLayoutX() - player.getLayoutX();
+                        double distanceY = enemyDummy.getLayoutY() - player.getLayoutY();
+
+                        if (Math.pow(distanceX, 2) + Math.pow(distanceY, 2) < Math.pow(70,2)) {
                             create = false;
                         }
 
@@ -380,8 +399,8 @@ public class Tank2025 extends Application {
                 enemies.clear( );
                 bullets.clear( );
                 player = new PlayerTank(playerTank1Image);
-                player.setLayoutX(50);
-                player.setLayoutY(50);
+                player.setLayoutX(spawnX);
+                player.setLayoutY(spawnY);
                 root.getChildren( ).add(player);
                 setScore(0);
                 player.setHealth(3);

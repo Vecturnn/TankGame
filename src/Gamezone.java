@@ -19,6 +19,11 @@ public class Gamezone extends Pane {
         for (int i = 200; i < stage.getHeight() - 150; i += 14) {createWall(stage.getWidth() - 120, i);}
         for (int i = 200; i < stage.getHeight() - 150; i += 14) {createWall(100, i);}
 
+        for (int i = 400; i < stage.getWidth() - 400; i += 16) {createWall(i, stage.getHeight()/2);}
+        for (int i = (int) stage.getHeight()/2 + 14; i < stage.getHeight()/2 + 120; i += 14) {createWall(stage.getWidth()/2 - 64, i);}
+        for (int i = (int) stage.getHeight()/2 + 14; i < stage.getHeight()/2 + 120; i += 14) {createWall(stage.getWidth()/2 + 64, i);}
+
+        for (int i = 300; i < stage.getHeight()/2 - 100; i += 14) {createWall(stage.getWidth()/2, i);}
 
     }
 

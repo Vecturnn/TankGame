@@ -215,8 +215,8 @@ class PlayerTank extends Tank {
     public void respawn() {
         setRespawnCountdown(0);
         setImage(Tank2025.getPlayerTank1Image());
-        setLayoutX(50);
-        setLayoutY(50);
+        setLayoutX(Tank2025.getSpawnX());
+        setLayoutY(Tank2025.getSpawnY());
     }
 }
 
